@@ -1,5 +1,6 @@
 const express = require('express')
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const cors = require('cors')
 const app = express()
 const port = 3000
 
@@ -11,9 +12,7 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-
-// 
-// 
+app.use(cors())
 
 // Mongo db
 
@@ -38,7 +37,7 @@ async function run() {
     // Send a ping to confirm a successful connection
     // start ----------
 
-    
+
 
 
     // End ----------
