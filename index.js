@@ -5,7 +5,7 @@ const app = express()
 const port = 3000
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Server is running!')
 })
 
 app.listen(port, () => {
@@ -38,6 +38,25 @@ async function run() {
     // start ----------
 
 
+    const database = client.db('Pathan_Furniture');
+    const collection = database.collection('json_data');
+
+    const json_data = [{
+      "id": 1,
+      "name": "Ashraful Pathan",
+      "age": 17
+    }]
+    
+    // ডেটা ইনসার্ট করার জন্য এন্ডপয়েন্ট
+    app.post('/insert-data', async (req, res) => {
+      try {
+        const result = await collection.insertMany(json_data);
+        res.status(200).send({ message: 'Data inserted successfully!', result });
+      } catch (error) {
+        res.status(500).send({ message: 'Error inserting data', error });
+      }
+    });
+
 
 
     // End ----------
@@ -45,7 +64,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    
   }
 }
 run().catch(console.dir);
