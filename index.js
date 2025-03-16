@@ -41,21 +41,6 @@ async function run() {
     const database = client.db('Pathan_Furniture');
     const collection = database.collection('json_data');
 
-    const json_data = [{
-      "id": 1,
-      "name": "Ashraful Pathan",
-      "age": 17
-    }]
-    
-    // ডেটা ইনসার্ট করার জন্য এন্ডপয়েন্ট
-    app.post('/insert-data', async (req, res) => {
-      try {
-        const result = await collection.insertMany(json_data);
-        res.status(200).send({ message: 'Data inserted successfully!', result });
-      } catch (error) {
-        res.status(500).send({ message: 'Error inserting data', error });
-      }
-    });
 
 
 
