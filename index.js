@@ -12,8 +12,13 @@ app.use(express.json());
 // connect sql database
 const sql = neon(process.env.DATABASE_URL);
 
+// start project
+app.get('/',(req,res) => {
+  res.send("Start project")
+})
+
 // Route: GET /  -> returns Postgres version
-app.get("/", async (req, res) => {
+app.get("/pgv", async (req, res) => {
   try {
     const result = await sql`SELECT version()`;
     res.type("text/plain").send(result[0].version);
@@ -22,6 +27,16 @@ app.get("/", async (req, res) => {
     res.status(500).send("Database error");
   }
 });
+
+// get all product data
+app.get('/product',async(req,res) =>{
+  try{
+
+  }catch (err){
+    console.log(err);
+    res.status(500).send("Erros is comming")
+  }
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
