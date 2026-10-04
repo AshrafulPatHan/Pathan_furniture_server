@@ -3,39 +3,26 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const { Pool } = require('pg');
+const { neon } = require("@neondatabase/serverless");
 const port = 3000;
 
-app.use(cors())
+app.use(cors());
+app.use(express.json());
 
-// Initialize the connection pool using .env credentials
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+// connect sql database
+const sql = neon(process.env.DATABASE_URL);
 
-// A helper function to run queries
-async function queryDatabase() {
+// Route: GET /  -> returns Postgres version
+app.get("/", async (req, res) => {
   try {
-    // You can query the pool directly; it handles checking clients in/out
-    const res = await pool.query('SELECT NOW()');
-    console.log('Connected successfully. Current time:', res.rows[0].now);
+    const result = await sql`SELECT version()`;
+    res.type("text/plain").send(result[0].version);
   } catch (err) {
-    console.error('Database query error:', err.stack);
-  } finally {
-    // Close the pool connections when your app shuts down
-    await pool.end();
+    console.error(err);
+    res.status(500).send("Database error");
   }
-}
-queryDatabase();
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-jjj
