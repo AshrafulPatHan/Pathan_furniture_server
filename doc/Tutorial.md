@@ -26,6 +26,7 @@ http.createServer(requestHandler).listen(3000, () => {
 });
 ```
 ## Common Status Codes
+```text
 • 200 OK: The request was completely successful.
 • 201 Created: A new resource was successfully created.
 • 204 No Content: The request worked, but there is no body data to return.
@@ -40,3 +41,4 @@ http.createServer(requestHandler).listen(3000, () => {
 • 500 Internal Server Error: A general error happened on the server.
 • 502 Bad Gateway: One server got an invalid response from another.
 • 503 Service Unavailable: The server is overloaded or down for
+```
