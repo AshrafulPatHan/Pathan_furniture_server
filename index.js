@@ -31,7 +31,8 @@ app.get("/pgv", async (req, res) => {
 // get all product data
 app.get('/product',async(req,res) =>{
   try{
-
+    const result = await sql`SELECT * FROM product `
+    res.status(200).send(result)
   }catch (err){
     console.log(err);
     res.status(500).send("Erros is comming")
