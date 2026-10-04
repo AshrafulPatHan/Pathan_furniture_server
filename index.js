@@ -39,6 +39,38 @@ app.get('/product',async(req,res) =>{
   }
 })
 
+
+// Post Product data
+app.post('/post-product',async (req,res) =>{
+  const { Name, Price, Size, Model, Details, Image } = req.body;
+    
+    // Simple validation rule
+    if (!Name || !Price || !Size || !Model || !Details || !Image) {
+        return res.status(400).json({ error: 'All fild required.' });
+    }
+  try{
+    
+    // insert Query and add all data into database
+    const result = await sql`
+      INSERT INTO product (name, price, size, model, details, image)
+      VALUES (${Name}, ${Price}, ${Size}, ${Model}, ${Details}, ${Image})
+      RETURNING *
+    `;
+
+    // send back a success status code 
+    res.status(201).json({
+      message: "Product Successfully added",
+      data: result[0]
+    });
+
+  }catch (err){
+    console.log(err);
+    res.status(500).send("Erros is comming")
+  }
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
