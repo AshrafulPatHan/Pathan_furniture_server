@@ -1,10 +1,14 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const cors = require('cors');
-require('dotenv').config();
-const { Pool } = require('pg');
-const { neon } = require("@neondatabase/serverless");
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
+import pg from 'pg';
+import { neon } from '@neondatabase/serverless';
+import redisClient from './DB/redisClient.js';
+const { Pool } = pg;
 const port = 3000;
+
 
 app.use(cors());
 app.use(express.json());
@@ -33,6 +37,37 @@ app.get('/product', async (req, res) => {
   try {
     const result = await sql`SELECT * FROM product `
     res.status(200).send(result)
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Erros is comming")
+  }
+})
+
+// get all product data Efficently 
+app.get('/all-product', async (req, res) => {
+    const cacheKey = 'all_products'; // Unique key for this data
+
+  try {
+    // 1. Try to get data from Redis first
+    const cachedData = await redisClient.get(cacheKey);
+
+     if (cachedData) {
+      console.log('Serving from Redis Cache');
+      return res.status(200).send(JSON.parse(cachedData));
+    }
+
+    // 2. Cache Miss: Query the database
+    console.log('Querying SQL Database');
+    const result = await sql`SELECT * FROM product`;
+
+    // 3. Save the result to Redis for next time
+    // 'EX' 3600 means the cache will expire in 1 hour (3600 seconds)
+    await redisClient.set(cacheKey, JSON.stringify(result), {
+      EX: 3600, 
+    });
+
+     res.status(200).send(result);
+
   } catch (err) {
     console.log(err);
     res.status(500).send("Erros is comming")

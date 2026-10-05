@@ -1,0 +1,2 @@
+﻿Status,Database ID,Database name,Subscription ID,Subscription name,Plan,Region,Public endpoint,Private endpoint,Memory limit (MB),Memory used (MB),Throughput (Ops/sec),Capabilities,Options,Shard type,Shard count,Shard price ($/hr),Database price ($/hr)
+Active,14668477,database-MUTWB0R6,3438494,database-MUTWB0R6,Essentials,ap-south-1,downtown-camera-lilacish-61404.db.redis.io:13412,N/A,30,2.1,N/A,Time series; Probabilistic; JSON; Search and query,N/A,N/A,N/A,N/A,Fixed price
